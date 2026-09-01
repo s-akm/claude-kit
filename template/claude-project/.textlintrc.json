@@ -1,0 +1,40 @@
+{
+  "filters": {
+    "comments": true
+  },
+  "rules": {
+    "preset-ja-technical-writing": {
+      "sentence-length": { "severity": "warning", "max": 120 },
+      "max-comma": { "severity": "warning", "max": 4 },
+      "max-ten": { "severity": "warning", "max": 3 },
+      "max-kanji-continuous-len": { "severity": "warning", "max": 6 },
+      "no-mix-dearu-desumasu": {
+        "preferInHeader": "",
+        "preferInBody": "",
+        "preferInList": "",
+        "strict": false
+      },
+      "ja-no-weak-phrase": { "severity": "warning" },
+      "ja-no-redundant-expression": { "severity": "warning" },
+      "no-doubled-conjunction": { "severity": "warning" },
+      "no-doubled-conjunctive-particle-ga": { "severity": "warning" },
+      "ja-no-successive-word": { "severity": "warning" },
+      "no-doubled-joshi": true,
+      "no-dropping-the-ra": true,
+      "no-double-negative-ja": true,
+      "ja-no-abusage": true,
+      "no-hankaku-kana": true,
+      "no-zero-width-spaces": true,
+      "no-nfd": true,
+      "no-invalid-control-character": true,
+      "no-unmatched-pair": true,
+      "arabic-kanji-numbers": false,
+      "ja-unnatural-alphabet": false,
+      "ja-no-mixed-period": false,
+      "no-exclamation-question-mark": false
+    },
+    "prh": {
+      "rulePaths": ["./prh/project-terms.yml"]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "claude-project",
+  "private": true,
+  "version": "0.0.0",
+  "description": "要件定義プロジェクトの文書検査環境",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "npm run lint:text && npm run lint:md",
+    "lint:text": "textlint 10_requirements 20_design 30_prompts 50_tracking README.md CLAUDE.md",
+    "lint:md": "markdownlint-cli2"
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "0.23.2",
+    "rust-just": "1.57.0",
+    "textlint": "15.8.0",
+    "textlint-filter-rule-comments": "1.3.0",
+    "textlint-rule-preset-ja-technical-writing": "12.0.2",
+    "textlint-rule-prh": "6.1.0"
+  }
+}

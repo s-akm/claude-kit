@@ -1,0 +1,11 @@
+# 検査コマンドの入口。実体は claude-kit の just/qa.just にある。
+# 下の 2 行は bin/new-claude-project が生成時に絶対パスへ書き換える。
+# claude-kit を移動したときは、この 2 行を直す。
+
+KIT := "__KIT_PATH__"
+
+import "__KIT_PATH__/just/qa.just"
+
+# レシピの一覧を出す
+default:
+    @just --list

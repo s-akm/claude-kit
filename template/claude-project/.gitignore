@@ -1,0 +1,25 @@
+.DS_Store
+node_modules/
+.venv/
+__pycache__/
+
+# 受領資料と提出物は Git に入れない（顧客情報を含む）
+00_sources/*
+!00_sources/README.md
+80_deliverables/*
+!80_deliverables/README.md
+
+# 検査結果は生成物
+90_qa/*
+!90_qa/README.md
+
+# 評価の実行結果は生成物
+40_evals/runs/*
+!40_evals/runs/.gitkeep
+
+# 認証情報
+.env
+.env.*
+*.pem
+*.key
+credentials*
