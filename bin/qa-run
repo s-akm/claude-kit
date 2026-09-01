@@ -2,8 +2,8 @@
 #
 # 成果物の機械検査をまとめて実行する。
 #
-#   qa-run all    <案件ディレクトリ>
-#   qa-run text   <案件ディレクトリ>  [出力先]
+#   qa-run all    <プロジェクトディレクトリ>
+#   qa-run text   <プロジェクトディレクトリ>  [出力先]
 #   qa-run xlsx   <ファイル>          [出力先]
 #   qa-run pptx   <ファイル>          [出力先]
 #   qa-run pdf    <ファイル>          [出力先]
@@ -30,7 +30,7 @@ py() { uv run --project "$KIT" --quiet python "$@"; }
 
 stamp() { date +%Y-%m-%d-%H%M; }
 
-# ファイルから案件ルートをさかのぼって探す
+# ファイルからプロジェクトルートをさかのぼって探す
 project_root() {
   local d
   d="$(cd "$(dirname "$1")" && pwd)"
@@ -187,7 +187,7 @@ run_all() {
     echo
     echo "| 項目 | 値 |"
     echo "| --- | --- |"
-    echo "| 案件 | \`$proj\` |"
+    echo "| プロジェクト | \`$proj\` |"
     echo "| 実行日時 | $(date '+%Y-%m-%d %H:%M:%S %z') |"
     echo "| 検査した成果物 | $n 件 |"
     echo "| 終了コード | $rc（0 指摘なし / 1 警告あり / 2 提出できない指摘あり） |"

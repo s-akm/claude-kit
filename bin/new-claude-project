@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# 新しい案件ディレクトリを、テンプレートから作る。
+# 新しいプロジェクトディレクトリを、テンプレートから作る。
 # 既定は表示のみ。--apply を付けたときだけ書き込む。
 # 既に同名のディレクトリがある場合は何もしない。
 
@@ -12,9 +12,9 @@ WORKSPACE="${CLAUDE_WORKSPACE:-$HOME/workspace}"
 
 usage() {
   cat <<USAGE
-使い方: new-claude-project <案件名> [--apply] [--dest <ディレクトリ>]
+使い方: new-claude-project <プロジェクト名> [--apply] [--dest <ディレクトリ>]
 
-  <案件名>        作成するディレクトリ名
+  <プロジェクト名>        作成するディレクトリ名
   --apply         実際に書き込む（省略時は表示のみ）
   --dest <path>   作成先の親ディレクトリ（既定: $WORKSPACE）
 
@@ -39,7 +39,7 @@ while [ $# -gt 0 ]; do
 done
 
 case "$NAME" in
-  ""|*/*|.|..) echo "案件名にディレクトリ区切りは使えません: $NAME" >&2; exit 1;;
+  ""|*/*|.|..) echo "プロジェクト名にディレクトリ区切りは使えません: $NAME" >&2; exit 1;;
 esac
 
 DEST="$DEST_PARENT/$NAME"
@@ -74,7 +74,7 @@ mkdir -p "$DEST"
   .) | (cd "$DEST" && tar xf -)
 
 # justfile に kit の場所を書き込む。
-# 案件と kit が同じ親ディレクトリにあるときは相対パスにする。
+# プロジェクトと kit が同じ親ディレクトリにあるときは相対パスにする。
 # 相対にしておくと、macOS 側と Cowork 側でマウント位置が違っても同じ justfile が使える。
 if [ -f "$DEST/justfile" ]; then
   if [ "$(dirname "$KIT")" = "$(cd "$DEST_PARENT" && pwd)" ]; then

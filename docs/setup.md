@@ -7,7 +7,7 @@ cd ~/workspace
 git clone <このリポジトリ> claude-kit
 ```
 
-案件は `~/workspace/<案件名>` に置く。kit と案件が同じ親ディレクトリにあることを前提に、
+プロジェクトは `~/workspace/<プロジェクト名>` に置く。kit とプロジェクトが同じ親ディレクトリにあることを前提に、
 生成される `justfile` は `../claude-kit` を相対で参照する。
 
 ### 必要なコマンド
@@ -16,7 +16,7 @@ git clone <このリポジトリ> claude-kit
 |---|---|---|
 | Node.js 22 以上 | textlint、markdownlint、just | mise |
 | Python 3.10 以上 | 検査スクリプト | mise |
-| `just` | 検査の入口 | 各案件の `npm ci` で入る（`rust-just`）。brew は不要 |
+| `just` | 検査の入口 | 各プロジェクトの `npm ci` で入る（`rust-just`）。brew は不要 |
 | `poppler` | PDF をページ画像にする | `brew install poppler` |
 | `qpdf` | PDF の構造検査 | `brew install qpdf` |
 | `imagemagick` | コンタクトシートの合成 | `brew install imagemagick` |
@@ -30,12 +30,12 @@ pptx を PDF にする用途で LibreOffice を使う手はあるが、日本語
 文字幅が変わって「文字切れ」の検査が当てにならなくなる。
 **体裁を見るための PDF は PowerPoint から書き出す。**
 
-## 2. 新しい案件を作る
+## 2. 新しいプロジェクトを作る
 
 ```sh
-~/workspace/claude-kit/bin/new-claude-project <案件名>          # 表示のみ
-~/workspace/claude-kit/bin/new-claude-project <案件名> --apply  # 作成
-cd ~/workspace/<案件名> && npm ci
+~/workspace/claude-kit/bin/new-claude-project <プロジェクト名>          # 表示のみ
+~/workspace/claude-kit/bin/new-claude-project <プロジェクト名> --apply  # 作成
+cd ~/workspace/<プロジェクト名> && npm ci
 ```
 
 既定は表示のみ。既に同名のディレクトリがある場合は何もしない。
@@ -43,7 +43,7 @@ cd ~/workspace/<案件名> && npm ci
 ## 3. 検査する
 
 ```sh
-cd ~/workspace/<案件名>
+cd ~/workspace/<プロジェクト名>
 npx just qa .
 ```
 
@@ -56,7 +56,7 @@ npx just qa .
 | 実行元 | `just` を呼べるか |
 |---|---|
 | ターミナル | 呼べる |
-| Cowork（案件フォルダを接続している場合） | 呼べる |
+| Cowork（プロジェクトフォルダを接続している場合） | 呼べる |
 | Claude デスクトップ単体 | **呼べない**。人が実行し、`90_qa/` の結果を読ませる |
 | Office アドイン（Excel・PowerPoint・Word） | **呼べない**。同上 |
 
@@ -70,7 +70,7 @@ npx just qa .
 |---|---|
 | その 1 件だけ | `50_tracking/qa-record.md` に、なぜ問題ないと判断したかを 1 行書く |
 | 特定のファイル全体 | ファイル先頭に `<!-- textlint-disable ルール名 -->` を書く |
-| 案件全体で繰り返す | `.textlintrc.json` か `prh/project-terms.yml` を直し、理由をコミットメッセージに書く |
+| プロジェクト全体で繰り返す | `.textlintrc.json` か `prh/project-terms.yml` を直し、理由をコミットメッセージに書く |
 
 `10_requirements/glossary.md` は「使わない語」を列に書くため、既定で prh の対象から外してある。
 
