@@ -10,7 +10,7 @@
 | `plugin/` | Claude のスキル本体。ここを zip して `.plugin` を作る |
 | `just/` | 検査コマンドの実体。各案件の `justfile` から読み込む |
 | `template/claude-project/` | 新規案件のひな形 |
-| `bin/` | 案件生成スクリプト（`new-claude-project`）と検査の実体（`qa-run`） |
+| `bin/` | 案件生成（`new-claude-project`）、検査の実体（`qa-run`）、再パッケージ（`build-plugin`） |
 | `tests/` | 検査スクリプトの確認用サンプルと生成コード。詳細は `tests/README.md` |
 | `docs/` | 導入手順と、Claude for Microsoft 365 の運用メモ |
 
@@ -26,7 +26,14 @@ bin/new-claude-project <案件名> --apply  # 実際に作る
 ## スキルを直したあとにやること
 
 リポジトリを直しただけでは、Claude デスクトップと Office アドインが読むスキルは変わらない。
-手順は `docs/setup.md` の「.plugin の作り直し」を見る。
+
+```sh
+bin/build-plugin          # 版とスキル名を点検してから dist/ に .plugin を作る
+bin/build-plugin --check  # 作らずに点検だけ
+```
+
+できた `.plugin` を Claude のチャットへ渡し、インストールで差し替える。
+アドイン側の使い方は `docs/claude-for-m365.md` にある。
 
 ## 検査する
 

@@ -81,13 +81,16 @@ npx just qa .
 
 ```sh
 cd ~/workspace/claude-kit
-mkdir -p dist
-cd plugin
-zip -r ../dist/jp-client-deliverables.plugin . \
-  -x "*.DS_Store" -x "*__pycache__/*"
+bin/build-plugin
 ```
 
+版とスキル名の対応、CHANGELOG に今の版の見出しがあるかを点検してから、`dist/` に 2 つ作る。
+
+- `jp-client-deliverables-<版>.plugin` — 版が名前に入ったもの
+- `jp-client-deliverables.plugin` — 常に最新を指す名前
+
 作った `.plugin` を Claude のチャットへ渡し、インストールで差し替える。
+点検だけしたいときは `bin/build-plugin --check`。
 
 Claude Code だけは、リポジトリを直接読ませられる。
 
@@ -95,7 +98,15 @@ Claude Code だけは、リポジトリを直接読ませられる。
 ln -s ~/workspace/claude-kit/plugin ~/.claude/plugins/jp-client-deliverables
 ```
 
-## 6. やらないこと
+## 6. Office アドインから使う
+
+Excel・PowerPoint・Word のアドインでも、有効にしたスキルがそのまま使える。
+導入の手順、スキルの呼び方、外部から受け取った Excel の安全なレビュー手順は
+`docs/claude-for-m365.md` にまとめてある。
+
+アドインからは `just` を呼べない。人が端末で実行し、`90_qa/` の結果を読ませる。
+
+## 7. やらないこと
 
 - 元ファイルを変更しない
 - 自動修正しない
