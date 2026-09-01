@@ -85,8 +85,8 @@ bin/build-plugin
 
 ## 5. 各アプリの Instructions
 
-サイドバーの設定にある Instructions は、**アプリごとに別**になっている。
-Excel に書いたものは PowerPoint には効かない。
+サイドバーの設定にある Instructions はアプリごとに独立している。
+Excel に書いた内容は PowerPoint へ引き継がれない。
 
 案件をまたいで変わらないことだけを書く。
 

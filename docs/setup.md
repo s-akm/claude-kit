@@ -22,7 +22,7 @@ git clone <このリポジトリ> claude-kit
 | `imagemagick` | コンタクトシートの合成 | `brew install imagemagick` |
 
 `just` は npm から入るため、Homebrew で入れる必要はない。
-`poppler` と `qpdf` と `imagemagick` は Phase 3 の検査スクリプトで使う。
+`poppler`、`qpdf`、`imagemagick` の 3 つは、PDF とスライドのチェックで使う。
 
 ### LibreOffice は入れない
 
@@ -76,27 +76,8 @@ npx just qa .
 
 ## 5. スキルを直したあとにやること
 
-リポジトリを直しただけでは、Claude デスクトップと Office アドインが読むスキルは変わらない。
-アカウントに同期されたものを差し替える。
-
-```sh
-cd ~/workspace/claude-kit
-bin/build-plugin
-```
-
-版とスキル名の対応、CHANGELOG に今の版の見出しがあるかを点検してから、`dist/` に 2 つ作る。
-
-- `jp-client-deliverables-<版>.plugin` — 版が名前に入ったもの
-- `jp-client-deliverables.plugin` — 常に最新を指す名前
-
-作った `.plugin` を Claude のチャットへ渡し、インストールで差し替える。
-点検だけしたいときは `bin/build-plugin --check`。
-
-Claude Code だけは、リポジトリを直接読ませられる。
-
-```sh
-ln -s ~/workspace/claude-kit/plugin ~/.claude/plugins/jp-client-deliverables
-```
+リポジトリを直しただけでは、Claude が読むスキルは変わらない。
+手順は [maintenance.md](maintenance.md) にある。
 
 ## 6. Office アドインから使う
 
