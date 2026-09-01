@@ -10,8 +10,8 @@
 | `plugin/` | Claude のスキル本体。ここを zip して `.plugin` を作る |
 | `just/` | 検査コマンドの実体。各案件の `justfile` から読み込む |
 | `template/claude-project/` | 新規案件のひな形 |
-| `bin/` | 案件生成スクリプト |
-| `tests/` | 検査スクリプトの確認用サンプルと生成コード |
+| `bin/` | 案件生成スクリプト（`new-claude-project`）と検査の実体（`qa-run`） |
+| `tests/` | 検査スクリプトの確認用サンプルと生成コード。詳細は `tests/README.md` |
 | `docs/` | 導入手順と、Claude for Microsoft 365 の運用メモ |
 
 ## 新規案件を作る
@@ -27,6 +27,18 @@ bin/new-claude-project <案件名> --apply  # 実際に作る
 
 リポジトリを直しただけでは、Claude デスクトップと Office アドインが読むスキルは変わらない。
 手順は `docs/setup.md` の「.plugin の作り直し」を見る。
+
+## 検査する
+
+```sh
+cd ~/workspace/<案件名>
+npx just qa .            # 文書 ＋ 80_deliverables の Excel・PowerPoint・PDF
+npx just qa-xlsx <file>  # 1 件だけ
+```
+
+結果は案件の `90_qa/<日時>/` に出る。終了コードは 0（指摘なし）、1（警告あり）、2（提出できない指摘）。
+
+Python の依存は `pyproject.toml` と `uv.lock` で固定してある。`uv run` が自動で用意する。
 
 ## この kit が守ること
 

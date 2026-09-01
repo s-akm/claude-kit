@@ -32,6 +32,10 @@
 | `pptx-house-style/scripts/pptx_audit.py` | 文言差分・書式の一様性・フォント混在・はみ出しを検査する | python-pptx |
 | `pptx-house-style/scripts/contact_sheet.py` | 全ページを1枚に並べて目視する | Pillow |
 | `requirements-xlsx/scripts/xlsx_open_items.py` | 未決セルとコメントを全件抽出し、コメントの付いていない未決を警告する | 標準ライブラリのみ |
+| `requirements-xlsx/scripts/xlsx_qa.py` | 提出前の Excel を検査する。数式エラー、外部リンク、非表示、名前定義、入力規則、シート間参照、表示形式の揺れ | openpyxl |
+| `pptx-house-style/scripts/pptx_qa.py` | 提出前のスライドを検査する。文字切れ、フォント混在、重なり、ページ番号、タイトル重複、出典 | python-pptx |
+| `pptx-house-style/scripts/pdf_qa.py` | PDF のページ数・構造・文字抽出可否を検査する | pypdf, qpdf |
+| `*/scripts/qa_report.py` | 検査結果を JSON と Markdown で書き出す。両スキルに同じ内容を置いている | 標準ライブラリのみ |
 
 ## 導入
 
