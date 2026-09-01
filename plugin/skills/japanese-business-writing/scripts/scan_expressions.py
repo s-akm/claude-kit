@@ -6,7 +6,7 @@ Markdown / テキスト / docx / pptx / xlsx からテキストを取り出し�
 標準ライブラリだけで動く（python-pptx 等は不要）。
 
     python3 scan_expressions.py 提出予定のフォルダ
-    python3 scan_expressions.py deck.pptx --add "案件固有の語"
+    python3 scan_expressions.py deck.pptx --add "プロジェクト固有の語"
     python3 scan_expressions.py . --patterns 別のpatterns.json
 """
 import argparse
@@ -108,14 +108,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("target", help="ファイルまたはフォルダ")
     ap.add_argument("--patterns", default=os.path.join(HERE, "patterns.json"))
-    ap.add_argument("--add", action="append", default=[], help="案件固有の語を追加する")
+    ap.add_argument("--add", action="append", default=[], help="プロジェクト固有の語を追加する")
     ap.add_argument("--quiet", action="store_true", help="ヒットのみ表示する")
     args = ap.parse_args()
 
     with open(args.patterns, encoding="utf-8") as f:
         groups = json.load(f)
     if args.add:
-        groups["案件固有"] = args.add
+        groups["プロジェクト固有"] = args.add
 
     compiled = []
     for label, pats in groups.items():

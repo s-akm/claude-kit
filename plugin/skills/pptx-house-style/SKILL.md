@@ -164,7 +164,7 @@ for i, (title, desc) in enumerate(items, start=1):
 | 実行元 | スクリプトを動かせるか |
 |---|---|
 | ターミナル | 動かせる |
-| Cowork（案件フォルダを接続している場合） | 動かせる |
+| Cowork（プロジェクトフォルダを接続している場合） | 動かせる |
 | Claude デスクトップ単体 | **動かせない** |
 | Office アドイン（PowerPoint） | **動かせない** |
 

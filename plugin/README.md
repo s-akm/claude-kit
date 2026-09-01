@@ -1,10 +1,10 @@
 # jp-client-deliverables
 
-日本語の顧客提出物を作るためのスキル一式。要件定義フェーズの実案件で受けた指摘を、
-案件が終わっても持ち運べる形にまとめている。
+日本語の顧客提出物を作るためのスキル一式。要件定義フェーズのプロジェクトで受けた指摘を、
+プロジェクトが終わっても持ち運べる形にまとめている。
 
 固有名詞（発注元・元請け・製品名）は一般語に置き換えてある。実測値や語彙といった
-案件固有の材料は `references/` 配下に「記入例」として残しており、次の案件では
+プロジェクト固有の材料は `references/` 配下に「記入例」として残しており、次のプロジェクトでは
 そこだけ差し替えれば使える。
 
 ## 収録スキル
@@ -43,11 +43,11 @@
 
 `.plugin` ファイルをチャットへ渡すか、リポジトリごと配置する。手順は `docs/導入手順.md` にある。
 
-## 次の案件で差し替える箇所
+## 次のプロジェクトで差し替える箇所
 
 | ファイル | 差し替える内容 |
 |---|---|
-| `japanese-business-writing/references/phrase-table.md` | 案件で指摘を受けた語を足す |
+| `japanese-business-writing/references/phrase-table.md` | プロジェクトで指摘を受けた語を足す |
 | `japanese-business-writing/scripts/patterns.json` | 上で足した語を機械走査にも反映する |
 | `pptx-house-style/references/measured-spec-example.md` | 対象デッキで測り直した値へ差し替える |
 | `deck-visual-design/SKILL.md` のデザイントークン | `BASE` をテンプレートのブランド色へ |
