@@ -2,25 +2,27 @@
 
 ## スキルの更新
 
-プロジェクトで指摘を受けたら、該当スキルの `references/` に行を足す。
-静的チェックで拾える指摘は `template/claude-project/prh/project-terms.yml` にも足す。
-`plugin/CHANGELOG.md` に日付と内容を 1 行書いてコミットする。
+プロジェクトで指摘を受けた際の手順。
 
-リポジトリの修正だけでは、Claude が読むスキルは変わらない。
+1. 該当スキルの `references/` に行を追加
+2. 静的チェックで拾える指摘は `template/claude-project/prh/project-terms.yml` にも追加
+3. `plugin/CHANGELOG.md` に日付と内容を 1 行記載
+4. コミット
+
+リポジトリの修正のみでは、Claude が読むスキルは未変更のまま。
 
 ```sh
 cd ~/workspace/claude-kit
 bin/build-plugin
 ```
 
-バージョンとスキル名の対応、CHANGELOG に現バージョンの見出しがあるかを検証してから、
-`dist/` にバージョン付きの名前と、常に最新を指す名前の 2 つを出力する。
-できた `.plugin` を Claude のチャットへ渡してインストールする。
+バージョンとスキル名の対応、CHANGELOG への現バージョンの見出しの有無を検証後、`dist/` に 2 つ出力。
+バージョン付きの名前と、常に最新を指す名前。できた `.plugin` を Claude のチャットへ渡してインストール。
 
 ## バージョン運用
 
-`plugin/.claude-plugin/plugin.json` の `version` と、`plugin/CHANGELOG.md` の見出しを同時に更新する。
-どちらかが欠けると `bin/build-plugin` が中断する。
+`plugin/.claude-plugin/plugin.json` の `version` と、`plugin/CHANGELOG.md` の見出しを同時に更新。
+片方が欠けた場合は `bin/build-plugin` が中断。
 
 ## チェック項目の追加
 
@@ -30,5 +32,5 @@ bin/build-plugin
 | PowerPoint | `plugin/skills/pptx-house-style/scripts/pptx_qa.py` |
 | PDF | `plugin/skills/pptx-house-style/scripts/pdf_qa.py` |
 
-修正後、`tests/fixtures/` の `ng` 側にも該当する問題を仕込み、検出されることを確認する。
-手順は [tests/README.md](../tests/README.md)。
+修正後、`tests/fixtures/` の `ng` 側にも該当する問題を仕込み、検出を確認。
+手順は [tests/README.md](../tests/README.md) を参照。
