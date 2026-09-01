@@ -17,7 +17,9 @@
 | `deck-visual-design` | スライドの見せ方。配色・余白・罫線・文字サイズの段階。参照できる既存ページが無いときの初期値 |
 | `pptx-house-style` | 顧客テンプレートに体裁を合わせる。実測 → 追従 → 機械検証。頻出トラブル6つの回避策 |
 | `requirements-xlsx` | 要件定義Excelの書き方。記入ルールの宣言、採番規約、未決セルとコメント運用 |
-| `deliverable-review-register` | 成果物を議事録と突き合わせ、修正案つきの指摘台帳にまとめる |
+| `deliverable-review-register` | 成果物を議事録と突き合わせ、修正案つきの指摘台帳にまとめる。要件書向けの品質チェックリストつき |
+| `basic-design-review` | 基本設計を要件と双方向で照合し、記述の抜けと未決の確定化を洗い出す |
+| `ai-design-prompt-review` | AI 向けの詳細設計とプロンプトを 10 項目で点検する。インジェクションへの備えを含む |
 
 ### 同梱スクリプト
 
@@ -57,6 +59,8 @@
 - スライドを作る → 既存デッキがあれば `pptx-house-style`、無ければ `deck-visual-design`
 - Excel定義書 → `requirements-xlsx`
 - 他社の成果物を見る → `deliverable-review-register`
+- 基本設計をレビューする → `basic-design-review`
+- AI 向けの指示をレビューする → `ai-design-prompt-review`
 
 ## ライセンス
 

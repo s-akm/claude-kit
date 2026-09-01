@@ -1,7 +1,7 @@
 {
   "name": "jp-client-deliverables",
-  "version": "1.1.0",
-  "description": "日本語の顧客提出物（提案資料、要件定義書、スライド、Excel定義書）を作るためのスキル一式。AI が書いた日本語の癖の取り方、顧客テンプレートに体裁を合わせる手順、要件定義 Excel の書き方、成果物レビューの指摘台帳の作り方をまとめている。",
+  "version": "1.2.0",
+  "description": "日本語の顧客提出物（提案資料、要件定義書、スライド、Excel定義書）を作り、レビューするためのスキル一式。AI が書いた日本語の癖の取り方、顧客テンプレートに体裁を合わせる手順、要件定義 Excel の書き方、成果物レビューの指摘台帳、基本設計と AI 向けプロンプトのレビュー観点をまとめている。",
   "author": {
     "name": "Lermo"
   },
@@ -11,7 +11,9 @@
     "pptx",
     "xlsx",
     "document-review",
-    "requirements"
+    "requirements",
+    "design-review",
+    "prompt-review"
   ],
   "license": "MIT"
 }
