@@ -9,6 +9,8 @@ description: "他社または自社が作成した成果物（要件定義書、
 
 台帳の書式とテンプレートは `references/register-format.md` にある。
 
+要件定義書が対象のときは、`references/requirement-quality-checklist.md` を先に通す。曖昧語、検証できない書き方、正常・異常・境界の不足、決定と未決の混同など、議事録との照合では出てこない種類の抜けを拾う。
+
 ---
 
 ## 手順
