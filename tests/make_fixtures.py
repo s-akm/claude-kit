@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""検査スクリプトの確認用サンプルを作る。
+"""チェックスクリプトの動作確認用サンプルを生成。
 
-顧客のファイルは使わない。毎回ここからゼロで作る。
+顧客のファイルは使用しない。毎回この場で生成。
 
     uv run python tests/make_fixtures.py
 
-作るもの（tests/fixtures/ 配下）
+生成物（tests/fixtures/ 配下）
     ok.xlsx  / ng.xlsx   Excel の正常版と問題版
     ok.pptx  / ng.pptx   PowerPoint の正常版と問題版
     ok.pdf   / ng.pdf    PDF の正常版と問題版
 
-ng 側に仕込む問題
+ng 側に仕込む不備
     xlsx  数式エラー、外部リンク、非表示シート・行・列、壊れた名前定義、
           存在しないシートへの参照、コメントの付いていない未決セル、書式の揺れ
     pptx  枠からはみ出す本文、フォント混在、図形の重なり、タイトル重複、
@@ -156,7 +156,7 @@ def build_pptx_ng(path):
 def build_pdfs(ok_pptx, ok_pdf, ng_pdf):
     soffice = shutil.which("soffice") or shutil.which("libreoffice")
     if not soffice:
-        print("  soffice が無いため PDF の fixture は作りません", file=sys.stderr)
+        print("  soffice 未検出のため PDF の fixture は生成せず", file=sys.stderr)
         return False
     tmp = os.path.join(OUT, "_pdftmp")
     os.makedirs(tmp, exist_ok=True)

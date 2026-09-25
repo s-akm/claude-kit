@@ -20,7 +20,7 @@
 | `40_evals/` | プロンプトの評価ケースと結果 |
 | `50_tracking/` | 課題、進捗、トレーサビリティ、QA 記録 |
 | `80_deliverables/` | 提出物 |
-| `90_qa/` | 検査結果（生成物） |
+| `90_qa/` | チェック結果（生成物） |
 
 扱いの詳細は各ディレクトリの README.md にある。Claude への約束は `CLAUDE.md`。
 
@@ -30,7 +30,7 @@
 npm ci                # textlint と markdownlint を入れる
 ```
 
-## 検査
+## チェック
 
 ```sh
 npx just qa .         # 全部
@@ -40,7 +40,7 @@ npx just qa-pptx 80_deliverables/説明資料_20260901.pptx
 npx just qa-pdf  80_deliverables/説明資料_20260901.pdf
 ```
 
-いずれも元ファイルを変更しない。結果は `90_qa/` に別ファイルとして出る。
+いずれも入力ファイルを変更しない。結果は `90_qa/` に別ファイルとして出る。
 
 終了コードは 0（指摘なし）、1（警告あり）、2（失敗）。
 

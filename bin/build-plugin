@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# plugin/ を .plugin へ固める。Claude デスクトップと Office アドインへ反映するときに使う。
+# plugin/ を .plugin へパッケージ。Claude デスクトップと Office アドインへの反映に使用。
 #
-#   bin/build-plugin            dist/jp-client-deliverables-<版>.plugin を作る
-#   bin/build-plugin --check    作らずに、版とスキル数の確認だけ行う
+#   bin/build-plugin            dist/jp-client-deliverables-<版>.plugin を出力
+#   bin/build-plugin --check    出力せず、バージョンとスキル数の検証のみ
 #
-# 作ったファイルをチャットへ渡し、インストールで差し替える。
-# リポジトリを直しただけでは、Claude が読むスキルは変わらない。
+# 出力したファイルをチャットへ渡し、インストールで差し替え。
+# リポジトリの修正のみでは、Claude が読むスキルは未変更のまま。
 
 set -euo pipefail
 
@@ -20,38 +20,38 @@ NAME=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["name"])' 
 VER=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["version"])' "$SRC/.claude-plugin/plugin.json")
 
 echo "プラグイン : $NAME"
-echo "版         : $VER"
+echo "バージョン : $VER"
 
-# --- スキルの点検 -------------------------------------------------
+# --- スキルの検証 -------------------------------------------------
 rc=0
 count=0
 for d in "$SRC"/skills/*/; do
   slug=$(basename "$d")
   count=$((count+1))
   if [ ! -f "$d/SKILL.md" ]; then
-    echo "  ★ SKILL.md がありません: $slug" >&2; rc=1; continue
+    echo "  NG SKILL.md 未検出: $slug" >&2; rc=1; continue
   fi
   name=$(sed -n 's/^name:[[:space:]]*//p' "$d/SKILL.md" | head -1)
   if [ "$name" != "$slug" ]; then
-    echo "  ★ name とディレクトリ名が違います: $slug (name: $name)" >&2; rc=1
+    echo "  NG name とディレクトリ名が不一致: $slug (name: $name)" >&2; rc=1
   fi
   if ! grep -q '^description:' "$d/SKILL.md"; then
-    echo "  ★ description がありません: $slug" >&2; rc=1
+    echo "  NG description 未記載: $slug" >&2; rc=1
   fi
 done
 echo "スキル     : $count 件"
 
-# --- CHANGELOG に今の版があるか ------------------------------------
+# --- CHANGELOG に現バージョンの見出しがあるか ------------------------------------
 if ! grep -q "^## $VER " "$SRC/CHANGELOG.md" 2>/dev/null; then
-  echo "  ★ CHANGELOG.md に $VER の見出しがありません" >&2; rc=1
+  echo "  NG CHANGELOG.md に $VER の見出しなし" >&2; rc=1
 fi
 
 if [ "$rc" != 0 ]; then
   echo >&2
-  echo "点検で問題が出たため、作成しません。" >&2
+  echo "検証に失敗したため、出力せず中断。" >&2
   exit 2
 fi
-echo "点検       : 問題なし"
+echo "検証       : 問題なし"
 
 if [ "${1:-}" = "--check" ]; then exit 0; fi
 
@@ -60,16 +60,16 @@ FILE="$OUT/$NAME-$VER.plugin"
 rm -f "$FILE"
 ( cd "$SRC" && zip -qr "$FILE" . -x "*.DS_Store" -x "*__pycache__/*" -x "*.pyc" )
 
-# 版を付けない名前でも置いておく（毎回同じ名前で渡したいとき用）
+# バージョンなしの名前でも出力（常に同じ名前で渡す用途）
 cp "$FILE" "$OUT/$NAME.plugin"
 
 echo
-echo "作成しました"
+echo "出力完了"
 echo "  $FILE"
 echo "  $OUT/$NAME.plugin"
 unzip -l "$FILE" | tail -1 | sed 's/^/  /'
 echo
-echo "次にやること"
-echo "  1. できた .plugin を Claude のチャットへ渡す"
-echo "  2. プレビューカードでインストールを押し、既存のものと差し替える"
-echo "  3. Excel と PowerPoint のアドインでも、スラッシュでスキルを呼べることを確認する"
+echo "次の手順"
+echo "  1. 出力した .plugin を Claude のチャットへ渡す"
+echo "  2. プレビューカードからインストールし、既存版と差し替え"
+echo "  3. Excel と PowerPoint のアドインで、スラッシュからの呼び出しを確認"

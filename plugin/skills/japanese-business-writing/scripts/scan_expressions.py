@@ -95,7 +95,7 @@ def collect(target: str):
         return [target]
     files = []
     for root, dirs, names in os.walk(target):
-        dirs[:] = [d for d in dirs if not d.startswith(".") and d != "__pycache__"]
+        dirs[:] = [d for d in dirs if not d.startswith(".") and d not in ("__pycache__", "node_modules", "dist", "build")]
         for n in sorted(names):
             if n.startswith("~$") or n.startswith("."):
                 continue

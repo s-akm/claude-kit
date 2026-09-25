@@ -11,9 +11,9 @@
 
 | スキル | 担当範囲 |
 |---|---|
-| `japanese-business-writing` | 日本語の文章を書く。名詞化・体言止め・約束の強さ・語の統一・見出しとリード文・組版。納品前の機械走査つき |
-| `japanese-rewrite` | すでにある下書きを、人が書いたと感じる日本語へ全面的に書き直す |
-| `emphasis-first-drafting` | 書き始める前に「どこに重きを置くか」を確認し、資料の濃淡を設計する |
+| `japanese-business-writing` | 日本語の文章を書く。名詞化・体言止め・対比と因果連結・約束の強さ・語の統一・見出しとリード文・装飾と組版。納品前の機械走査つき |
+| `japanese-rewrite` | すでにある下書きを、人が書いたと感じる日本語へ全面的に書き直す。口語で人らしさを装わない |
+| `emphasis-first-drafting` | 書き始める前に重みの配分を確認。資料の濃淡を設計 |
 | `deck-visual-design` | スライドの見せ方。配色・余白・罫線・文字サイズの段階。参照できる既存ページが無いときの初期値 |
 | `pptx-house-style` | 顧客テンプレートに体裁を合わせる。実測 → 追従 → 機械検証。頻出トラブル6つの回避策 |
 | `requirements-xlsx` | 要件定義Excelの書き方。記入ルールの宣言、採番規約、未決セルとコメント運用 |
@@ -27,17 +27,17 @@
 
 | スクリプト | 内容 | 依存 |
 |---|---|---|
-| `japanese-business-writing/scripts/scan_expressions.py` | md・pptx・xlsx・docx から本文を取り出し、口語や記号の残りを走査する | 標準ライブラリのみ |
-| `pptx-house-style/scripts/pptx_measure.py` | 既存デッキの座標・級数・色・線幅を実測する | python-pptx, lxml |
-| `pptx-house-style/scripts/fix_fonts.py` | theme / master / layout / slide の全レイヤーでフォントを統一する | 標準ライブラリのみ |
+| `japanese-business-writing/scripts/scan_expressions.py` | md・pptx・xlsx・docx から本文を抽出。口語や記号の残りを走査 | 標準ライブラリのみ |
+| `pptx-house-style/scripts/pptx_measure.py` | 既存デッキの座標・級数・色・線幅を実測 | python-pptx, lxml |
+| `pptx-house-style/scripts/fix_fonts.py` | theme / master / layout / slide の全レイヤーでフォントを統一 | 標準ライブラリのみ |
 | `pptx-house-style/scripts/deckkit.py` | 罫線・テキスト枠・セル幅・見出し幅のヘルパ | python-pptx, lxml |
-| `pptx-house-style/scripts/pptx_audit.py` | 文言差分・書式の一様性・フォント混在・はみ出しを検査する | python-pptx |
-| `pptx-house-style/scripts/contact_sheet.py` | 全ページを1枚に並べて目視する | Pillow |
-| `requirements-xlsx/scripts/xlsx_open_items.py` | 未決セルとコメントを全件抽出し、コメントの付いていない未決を警告する | 標準ライブラリのみ |
-| `requirements-xlsx/scripts/xlsx_qa.py` | 提出前の Excel を検査する。数式エラー、外部リンク、非表示、名前定義、入力規則、シート間参照、表示形式の揺れ | openpyxl |
-| `pptx-house-style/scripts/pptx_qa.py` | 提出前のスライドを検査する。文字切れ、フォント混在、重なり、ページ番号、タイトル重複、出典 | python-pptx |
-| `pptx-house-style/scripts/pdf_qa.py` | PDF のページ数・構造・文字抽出可否を検査する | pypdf, qpdf |
-| `*/scripts/qa_report.py` | 検査結果を JSON と Markdown で書き出す。両スキルに同じ内容を置いている | 標準ライブラリのみ |
+| `pptx-house-style/scripts/pptx_audit.py` | 文言差分・書式の一様性・フォント混在・はみ出しをチェック | python-pptx |
+| `pptx-house-style/scripts/contact_sheet.py` | 全ページを 1 枚に並べて目視 | Pillow |
+| `requirements-xlsx/scripts/xlsx_open_items.py` | 未決セルとコメントを全件抽出。コメントの付いていない未決を警告 | 標準ライブラリのみ |
+| `requirements-xlsx/scripts/xlsx_qa.py` | 提出前の Excel の静的チェック。数式エラー、外部リンク、非表示、名前定義、入力規則、シート間参照、表示形式の揺れ | openpyxl |
+| `pptx-house-style/scripts/pptx_qa.py` | 提出前のスライドの静的チェック。文字切れ、フォント混在、重なり、ページ番号、タイトル重複、出典 | python-pptx |
+| `pptx-house-style/scripts/pdf_qa.py` | PDF のページ数・構造・文字抽出可否をチェック | pypdf, qpdf |
+| `*/scripts/qa_report.py` | チェック結果を JSON と Markdown で出力。両スキルに同じ内容を配置 | 標準ライブラリのみ |
 
 ## 導入
 
@@ -48,7 +48,7 @@
 | ファイル | 差し替える内容 |
 |---|---|
 | `japanese-business-writing/references/phrase-table.md` | プロジェクトで指摘を受けた語を足す |
-| `japanese-business-writing/scripts/patterns.json` | 上で足した語を機械走査にも反映する |
+| `japanese-business-writing/scripts/patterns.json` | 上で追加した語を機械走査にも反映 |
 | `pptx-house-style/references/measured-spec-example.md` | 対象デッキで測り直した値へ差し替える |
 | `deck-visual-design/SKILL.md` のデザイントークン | `BASE` をテンプレートのブランド色へ |
 

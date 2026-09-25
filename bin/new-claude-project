@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# 新しいプロジェクトディレクトリを、テンプレートから作る。
-# 既定は表示のみ。--apply を付けたときだけ書き込む。
-# 既に同名のディレクトリがある場合は何もしない。
+# テンプレートから新しいプロジェクトディレクトリを作成。
+# 既定は dry-run。--apply の指定時のみ書き込み。
+# 同名ディレクトリが存在する場合は中断。
 
 set -euo pipefail
 
@@ -15,12 +15,12 @@ usage() {
 使い方: new-claude-project <プロジェクト名> [--apply] [--dest <ディレクトリ>]
 
   <プロジェクト名>        作成するディレクトリ名
-  --apply         実際に書き込む（省略時は表示のみ）
+  --apply         書き込みを実行（省略時は dry-run）
   --dest <path>   作成先の親ディレクトリ（既定: $WORKSPACE）
 
 例:
-  new-claude-project sample-pj            # 何を作るか表示する
-  new-claude-project sample-pj --apply    # 作成する
+  new-claude-project sample-pj            # 作成対象を表示
+  new-claude-project sample-pj --apply    # 作成
 USAGE
 }
 
@@ -39,15 +39,15 @@ while [ $# -gt 0 ]; do
 done
 
 case "$NAME" in
-  ""|*/*|.|..) echo "プロジェクト名にディレクトリ区切りは使えません: $NAME" >&2; exit 1;;
+  ""|*/*|.|..) echo "プロジェクト名にディレクトリ区切りは使用不可: $NAME" >&2; exit 1;;
 esac
 
 DEST="$DEST_PARENT/$NAME"
 
-[ -d "$TEMPLATE" ] || { echo "テンプレートがありません: $TEMPLATE" >&2; exit 2; }
+[ -d "$TEMPLATE" ] || { echo "テンプレート未検出: $TEMPLATE" >&2; exit 2; }
 
 if [ -e "$DEST" ]; then
-  echo "既に存在します。何もしません: $DEST" >&2
+  echo "既存ディレクトリのため中断: $DEST" >&2
   exit 1
 fi
 
@@ -63,7 +63,7 @@ echo
 if [ "$APPLY" != true ]; then
   printf '%s\n' "$FILES" | sed 's|^|  |'
   echo
-  echo "表示のみです。作成するには --apply を付けてください。"
+  echo "dry-run。作成するには --apply を指定。"
   exit 0
 fi
 
@@ -73,9 +73,9 @@ mkdir -p "$DEST"
   --exclude='.DS_Store' \
   .) | (cd "$DEST" && tar xf -)
 
-# justfile に kit の場所を書き込む。
-# プロジェクトと kit が同じ親ディレクトリにあるときは相対パスにする。
-# 相対にしておくと、macOS 側と Cowork 側でマウント位置が違っても同じ justfile が使える。
+# justfile に kit の場所を書き込み。
+# プロジェクトと kit が同じ親ディレクトリの場合は相対パス。
+# 相対パスなら、macOS 側と Cowork 側でマウント位置が異なっても同一の justfile が動作。
 if [ -f "$DEST/justfile" ]; then
   if [ "$(dirname "$KIT")" = "$(cd "$DEST_PARENT" && pwd)" ]; then
     KIT_REF="../$(basename "$KIT")"
@@ -87,10 +87,10 @@ if [ -f "$DEST/justfile" ]; then
   echo "kit の参照: $KIT_REF"
 fi
 
-echo "作成しました: $DEST"
+echo "作成完了: $DEST"
 echo
-echo "次にやること"
+echo "次の手順"
 echo "  1. cd \"$DEST\""
-echo "  2. npm ci                       # 検査ツールを入れる"
-echo "  3. CLAUDE.md の採番規約と文体を埋める"
-echo "  4. git init && git add -A       # コミットは内容を確認してから"
+echo "  2. npm ci                       # チェックツールの導入"
+echo "  3. CLAUDE.md の採番規約と文体を記入"
+echo "  4. git init && git add -A       # 内容を確認してからコミット"

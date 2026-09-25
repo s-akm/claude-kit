@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""提出前の PDF を機械で検査する。元ファイルは変更しない。
+"""提出前の PDF を静的チェック。入力ファイルは変更しない。
 
     python3 pdf_qa.py 説明資料.pdf --out-dir 90_qa/2026-09-01-1200
 
-検査する内容
+チェック項目
     1. ページ数
     2. 構造の破損（qpdf --check。qpdf が無ければ pypdf の読み込み可否だけ）
     3. 文字を抽出できるか（ページごと）
     4. 暗号化・権限の設定
     5. ページサイズの揺れ
 
-終了コード
-    0 指摘なし / 1 警告あり / 2 提出できない指摘あり、またはファイルが読めない
+Exit code
+    0 指摘なし / 1 警告あり / 2 提出不可の指摘あり、またはファイル読み込み不可
 """
 import argparse
 import os
@@ -27,7 +27,7 @@ MIN_CHARS = 20
 
 
 def add(f, sev, check, where, what, how=""):
-    f.append({"重要度": sev, "検査": check, "場所": where, "内容": what, "対応": how})
+    f.append({"重要度": sev, "項目": check, "箇所": where, "内容": what, "対応": how})
 
 
 def check(path, min_chars=MIN_CHARS):
@@ -46,7 +46,7 @@ def check(path, min_chars=MIN_CHARS):
                 "qpdf --check が異常を返した: %s" % " / ".join(head[:3])[:200],
                 "作り直すか、元のアプリから書き出し直す")
     else:
-        notes.append("qpdf が入っていないため、構造の詳しい検査はしていない。"
+        notes.append("qpdf が入っていないため、構造の詳細チェックは未実施。"
                      "brew install qpdf で入る。")
 
     reader = PdfReader(path)
@@ -92,16 +92,16 @@ def check(path, min_chars=MIN_CHARS):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PDF の機械検査（元ファイルは変更しない）")
-    ap.add_argument("file", help="検査する .pdf")
-    ap.add_argument("--out-dir", default=".", help="結果の出力先")
+    ap = argparse.ArgumentParser(description="PDF の静的チェック（入力ファイルは変更しない）")
+    ap.add_argument("file", help="対象の .pdf")
+    ap.add_argument("--out-dir", default=".", help="出力先ディレクトリ")
     ap.add_argument("--stem", help="出力ファイル名（既定: pdf-<ファイル名>）")
     ap.add_argument("--min-chars", type=int, default=MIN_CHARS,
-                    help="このページは文字が無いとみなす下限（既定 20）")
+                    help="文字なしと判定する文字数の下限（既定 20）")
     args = ap.parse_args()
 
     if not os.path.isfile(args.file):
-        print("ファイルがありません: %s" % args.file, file=sys.stderr)
+        print("ファイル未検出: %s" % args.file, file=sys.stderr)
         return 2
 
     versions = qa_report.tool_versions(["pypdf"])
@@ -109,14 +109,14 @@ def main():
     try:
         findings, notes = check(args.file, args.min_chars)
     except Exception as e:
-        print("読めませんでした: %s: %s" % (type(e).__name__, e), file=sys.stderr)
+        print("読み込み不可: %s: %s" % (type(e).__name__, e), file=sys.stderr)
         return 2
 
     report = qa_report.build("PDF", args.file, findings, versions, notes)
     stem = args.stem or ("pdf-" + os.path.splitext(os.path.basename(args.file))[0])
     jp, mp = qa_report.write(report, args.out_dir, stem)
     c = report["件数"]
-    print("PDF    %s  要確認 %d / 警告 %d / 情報 %d  → %s"
+    print("PDF    %s  要確認 %d / 警告 %d / 情報 %d  %s"
           % (os.path.basename(args.file), c["要確認"], c["警告"], c["情報"], mp))
     return qa_report.exit_code(report)
 

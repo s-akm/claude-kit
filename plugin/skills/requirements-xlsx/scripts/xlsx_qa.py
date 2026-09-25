@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""提出前の Excel を機械で検査する。元ファイルは変更しない。
+"""提出前の Excel を静的チェック。入力ファイルは変更しない。
 
     python3 xlsx_qa.py 機能一覧.xlsx --out-dir 90_qa/2026-09-01-1200
 
-検査する内容
+チェック項目
     1. 数式エラー（キャッシュされた計算結果と、式に残った #REF!）
     2. 外部ブックへのリンク
     3. 非表示のシート・行・列
@@ -12,8 +12,8 @@
     6. シート間参照（存在しないシートを指しているもの）
     7. 同じ列の中での表示形式の揺れ
 
-終了コード
-    0 指摘なし / 1 警告あり / 2 提出できない指摘あり、またはファイルが読めない
+Exit code
+    0 指摘なし / 1 警告あり / 2 提出不可の指摘あり、またはファイル読み込み不可
 """
 import argparse
 import os
@@ -32,7 +32,7 @@ OPEN_WORDS = re.compile(r"要確認|要検討|確認中|未確定|未決|未定|
 
 
 def add(f, sev, check, where, what, how=""):
-    f.append({"重要度": sev, "検査": check, "場所": where, "内容": what, "対応": how})
+    f.append({"重要度": sev, "項目": check, "箇所": where, "内容": what, "対応": how})
 
 
 def cell_ref(ws_title, coord):
@@ -170,34 +170,34 @@ def check_workbook(path):
         notes.append("このブックには計算結果が保存されていないため、"
                      "0 除算などの実行時エラーは検出できない。"
                      "Excel で一度開いて保存したファイルなら検出できる。")
-    notes.append("グラフと元データの値が合っているかは、この検査では判定しない。目視で確認する。")
+    notes.append("グラフと元データの値が合っているかは、このチェックの対象外。目視で確認する。")
 
     return findings, notes
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Excel の機械検査（元ファイルは変更しない）")
-    ap.add_argument("file", help="検査する .xlsx")
-    ap.add_argument("--out-dir", default=".", help="結果の出力先")
+    ap = argparse.ArgumentParser(description="Excel の静的チェック（入力ファイルは変更しない）")
+    ap.add_argument("file", help="対象の .xlsx")
+    ap.add_argument("--out-dir", default=".", help="出力先ディレクトリ")
     ap.add_argument("--stem", help="出力ファイル名（既定: xlsx-<ファイル名>）")
     args = ap.parse_args()
 
     if not os.path.isfile(args.file):
-        print("ファイルがありません: %s" % args.file, file=sys.stderr)
+        print("ファイル未検出: %s" % args.file, file=sys.stderr)
         return 2
 
     versions = qa_report.tool_versions(["openpyxl"])
     try:
         findings, notes = check_workbook(args.file)
     except Exception as e:
-        print("読めませんでした: %s: %s" % (type(e).__name__, e), file=sys.stderr)
+        print("読み込み不可: %s: %s" % (type(e).__name__, e), file=sys.stderr)
         return 2
 
     report = qa_report.build("Excel", args.file, findings, versions, notes)
     stem = args.stem or ("xlsx-" + os.path.splitext(os.path.basename(args.file))[0])
     jp, mp = qa_report.write(report, args.out_dir, stem)
     c = report["件数"]
-    print("Excel  %s  要確認 %d / 警告 %d / 情報 %d  → %s"
+    print("Excel  %s  要確認 %d / 警告 %d / 情報 %d  %s"
           % (os.path.basename(args.file), c["要確認"], c["警告"], c["情報"], mp))
     return qa_report.exit_code(report)
 

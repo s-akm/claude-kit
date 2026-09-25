@@ -1,4 +1,4 @@
-# 検査スクリプトの確認用サンプル
+# チェックスクリプトの動作確認用サンプル
 
 `make_fixtures.py` が `fixtures/` に 6 ファイルを作る。顧客のファイルは使わない。
 
@@ -11,7 +11,7 @@
 | `ok.pdf` | なし |
 | `ng.pdf` | 文字を抽出できないページだけ |
 
-## 作り直す
+## 再生成
 
 ```sh
 uv run python tests/make_fixtures.py
@@ -23,7 +23,7 @@ uv run python tests/make_fixtures.py
 `ok.pdf` は LibreOffice を使って `ok.pptx` から作っている。LibreOffice が無い端末では
 PDF の 2 ファイルが作られない。既にリポジトリに入っているものをそのまま使えばよい。
 
-## 確認する
+## 動作確認
 
 ```sh
 uv run python plugin/skills/requirements-xlsx/scripts/xlsx_qa.py tests/fixtures/ok.xlsx --out-dir /tmp/qa   # 0

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""提出前の PowerPoint を機械で検査する。元ファイルは変更しない。
+"""提出前の PowerPoint を静的チェック。入力ファイルは変更しない。
 
     python3 pptx_qa.py 説明資料.pptx --out-dir 90_qa/2026-09-01-1200
 
-検査する内容
+チェック項目
     1. 文字切れ（推定した本文の高さ > 枠の高さ）
     2. フォントの混在
     3. 図形の重なり
@@ -13,10 +13,10 @@
     7. 空のテキスト枠
 
 before/after の文言差分や書式の一様性は pptx_audit.py が担当する。
-この検査は「提出前に 1 ファイルだけ見る」用途に絞っている。
+このチェックは提出前の 1 ファイル確認に用途を限定。
 
-終了コード
-    0 指摘なし / 1 警告あり / 2 提出できない指摘あり、またはファイルが読めない
+Exit code
+    0 指摘なし / 1 警告あり / 2 提出不可の指摘あり、またはファイル読み込み不可
 """
 import argparse
 import os
@@ -37,7 +37,7 @@ SOURCE_WORDS = re.compile(r"出典|出所|Source|ソース|注\)|※")
 
 
 def add(f, sev, check, where, what, how=""):
-    f.append({"重要度": sev, "検査": check, "場所": where, "内容": what, "対応": how})
+    f.append({"重要度": sev, "項目": check, "箇所": where, "内容": what, "対応": how})
 
 
 def rect(sh):
@@ -167,35 +167,35 @@ def check(path, overlap_threshold=0.15):
                  "マスター側のプレースホルダで表示している場合は検出できない。")
     notes.append("文字切れは推定であり、実際の描画とは差が出る。"
                  "確定させるには PowerPoint から PDF に書き出して目視する。")
-    notes.append("出典の要否と、Excel との数値の一致は、この検査では判定しない。")
+    notes.append("出典の要否と、Excel との数値の一致は、このチェックの対象外。")
     return findings, notes
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PowerPoint の機械検査（元ファイルは変更しない）")
-    ap.add_argument("file", help="検査する .pptx")
-    ap.add_argument("--out-dir", default=".", help="結果の出力先")
+    ap = argparse.ArgumentParser(description="PowerPoint の静的チェック（入力ファイルは変更しない）")
+    ap.add_argument("file", help="対象の .pptx")
+    ap.add_argument("--out-dir", default=".", help="出力先ディレクトリ")
     ap.add_argument("--stem", help="出力ファイル名（既定: pptx-<ファイル名>）")
     ap.add_argument("--overlap", type=float, default=0.15,
-                    help="重なりとみなす面積比（既定 0.15）")
+                    help="重なりと判定する面積比（既定 0.15）")
     args = ap.parse_args()
 
     if not os.path.isfile(args.file):
-        print("ファイルがありません: %s" % args.file, file=sys.stderr)
+        print("ファイル未検出: %s" % args.file, file=sys.stderr)
         return 2
 
     versions = qa_report.tool_versions(["pptx"])
     try:
         findings, notes = check(args.file, args.overlap)
     except Exception as e:
-        print("読めませんでした: %s: %s" % (type(e).__name__, e), file=sys.stderr)
+        print("読み込み不可: %s: %s" % (type(e).__name__, e), file=sys.stderr)
         return 2
 
     report = qa_report.build("PowerPoint", args.file, findings, versions, notes)
     stem = args.stem or ("pptx-" + os.path.splitext(os.path.basename(args.file))[0])
     jp, mp = qa_report.write(report, args.out_dir, stem)
     c = report["件数"]
-    print("PPTX   %s  要確認 %d / 警告 %d / 情報 %d  → %s"
+    print("PPTX   %s  要確認 %d / 警告 %d / 情報 %d  %s"
           % (os.path.basename(args.file), c["要確認"], c["警告"], c["情報"], mp))
     return qa_report.exit_code(report)
 
