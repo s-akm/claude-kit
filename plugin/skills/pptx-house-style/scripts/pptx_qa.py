@@ -2,6 +2,7 @@
 """提出前の PowerPoint を静的チェック。入力ファイルは変更しない。
 
     python3 pptx_qa.py 説明資料.pptx --out-dir 90_qa/2026-09-01-1200
+    python3 pptx_qa.py 資料.pptx --lnpct 1.35 --aft 0    # pptxgenjs で組んだ資料（行間・段落後余白を明示している）
 
 チェック項目
     1. 文字切れ（推定した本文の高さ > 枠の高さ）
@@ -59,7 +60,7 @@ def overlap_ratio(a, b):
     return inter / smaller if smaller > 0 else 0.0
 
 
-def check(path, overlap_threshold=0.15):
+def check(path, overlap_threshold=0.15, lnpct=1.40, aft_pt=3):
     prs = Presentation(path)
     findings = []
     notes = []
@@ -84,6 +85,15 @@ def check(path, overlap_threshold=0.15):
                         fonts[run.font.name] += 1
 
             if not text:
+                # txBody を持たない図形（塗りの枠・罫線）は文字枠ではない
+                if getattr(sh, "_element", None) is not None and sh._element.find(
+                        "{http://schemas.openxmlformats.org/presentationml/2006/main}txBody") is None:
+                    continue
+                # 塗りか枠線のある図形（パネル・帯）は文字枠ではない
+                sppr = sh._element.find("{http://schemas.openxmlformats.org/presentationml/2006/main}spPr")
+                xml = sppr.xml if sppr is not None else ""
+                if "<a:solidFill" in xml or "<a:gradFill" in xml or ("<a:ln" in xml and "<a:noFill" not in xml.split("<a:ln", 1)[1][:80] and "<a:ln/>" not in xml and "<a:ln></a:ln>" not in xml):
+                    continue
                 if r and r[2] > 0.3 and r[3] > 0.2:
                     add(findings, "情報", "空のテキスト枠", where,
                         "文字の入っていない枠がある（左 %.1fin 上 %.1fin）" % (r[0], r[1]),
@@ -100,7 +110,7 @@ def check(path, overlap_threshold=0.15):
 
                 # --- 文字切れ
                 try:
-                    need = est_height_in(sh)
+                    need = est_height_in(sh, lnpct=lnpct, aft_pt=aft_pt)
                 except Exception:
                     need = None
                 if need and r[3] > 0 and need > r[3] * 1.02:
@@ -129,7 +139,7 @@ def check(path, overlap_threshold=0.15):
         if FIGURE_WORDS.search(body) and not SOURCE_WORDS.search(body):
             add(findings, "情報", "出典", where,
                 "数値か図表があるが、出典の記載が見あたらない",
-                "出典が要るスライドか目視で判断する")
+                "出典が必要なスライドか目視で判断する")
 
     # --- タイトル重複
     for t, pages in titles.items():
@@ -178,6 +188,10 @@ def main():
     ap.add_argument("--stem", help="出力ファイル名（既定: pptx-<ファイル名>）")
     ap.add_argument("--overlap", type=float, default=0.15,
                     help="重なりと判定する面積比（既定 0.15）")
+    ap.add_argument("--lnpct", type=float, default=1.40,
+                    help="文字切れ推定の行間係数（既定 1.40。pptxgenjs で lineSpacingMultiple を明示した資料は その値）")
+    ap.add_argument("--aft", type=float, default=3.0,
+                    help="文字切れ推定の段落後余白 pt（既定 3。段落後余白を持たない資料は 0）")
     args = ap.parse_args()
 
     if not os.path.isfile(args.file):
@@ -186,7 +200,7 @@ def main():
 
     versions = qa_report.tool_versions(["pptx"])
     try:
-        findings, notes = check(args.file, args.overlap)
+        findings, notes = check(args.file, args.overlap, args.lnpct, args.aft)
     except Exception as e:
         print("読み込み不可: %s: %s" % (type(e).__name__, e), file=sys.stderr)
         return 2

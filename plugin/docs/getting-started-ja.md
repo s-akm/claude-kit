@@ -4,7 +4,7 @@
 
 1. `jp-client-deliverables.plugin` をチャットへ添付
 2. プレビューカードの内容を確認し、インストールを実行
-3. スキル一覧に 9 件が追加
+3. スキル一覧に 11 件が追加
 
 Excel・PowerPoint・Word のアドインからも、同じスキルを `/` で呼び出し可能。
 
@@ -79,6 +79,10 @@ bin/build-plugin
 zip -r /tmp/jp-client-deliverables.plugin . \
   -x "*.DS_Store" -x "*__pycache__/*" -x "*.plugin"
 ```
+
+`plugin/` 配下のファイル名は ASCII に限定。`zip` コマンドは日本語のファイル名に UTF-8 フラグを立てず、
+インストーラが「Zip file contains path with invalid characters」で停止（2.10.2 系統の 1.10.1 で改名した理由）。
+`bin/build-plugin` は Python の `zipfile` で格納するため、この制約の対象外。
 
 ## E. 更新（既にインストール済みの場合）
 

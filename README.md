@@ -3,7 +3,7 @@
 要件定義の成果物を Claude にレビューさせるための CLI とスキル集。
 
 機械で判定可能な不備を静的チェックで一覧化。採否と提出可否は利用者の判断。
-Claude のスキル 9 件、プロジェクトのひな形、Excel・PowerPoint・PDF のチェックを同梱。
+Claude のスキル 11 件、プロジェクトのひな形、Excel・PowerPoint・PDF のチェックを同梱。
 
 - [概要](#概要)
 - [動作環境](#動作環境)
@@ -131,7 +131,7 @@ npx just qa .
 ```text
 ~/workspace/
 ├── claude-kit/                  この kit
-│   ├── plugin/                  Claude のスキル 9 件
+│   ├── plugin/                  Claude のスキル 11 件
 │   ├── template/claude-project/ プロジェクトのひな形
 │   ├── bin/                     CLI 3 本
 │   ├── just/                    just のレシピ
@@ -197,7 +197,7 @@ kit の CLI の実行場所は `~/workspace/claude-kit`。
 | [docs/maintenance.md](docs/maintenance.md) | スキルの更新、バージョン運用、チェック項目の追加 |
 | [docs/claude-for-m365.md](docs/claude-for-m365.md) | Excel・PowerPoint・Word アドインの導入と運用 |
 | [tests/README.md](tests/README.md) | fixture の中身と再生成 |
-| [plugin/README.md](plugin/README.md) | スキル 9 件の使い分け |
+| [plugin/README.md](plugin/README.md) | スキル 11 件の使い分け |
 
 ## トラブルシューティング
 

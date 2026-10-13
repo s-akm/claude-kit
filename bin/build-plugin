@@ -58,7 +58,20 @@ if [ "${1:-}" = "--check" ]; then exit 0; fi
 mkdir -p "$OUT"
 FILE="$OUT/$NAME-$VER.plugin"
 rm -f "$FILE"
-( cd "$SRC" && zip -qr "$FILE" . -x "*.DS_Store" -x "*__pycache__/*" -x "*.pyc" )
+# zip コマンドは非 ASCII のファイル名に UTF-8 フラグを立てず、インストーラが不正な文字列として扱う。
+# Python の zipfile で格納（非 ASCII 名に UTF-8 フラグが立つ）。
+python3 - "$SRC" "$FILE" <<'PY'
+import os, sys, zipfile
+src, out = sys.argv[1], sys.argv[2]
+with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+    for root, dirs, names in os.walk(src):
+        dirs[:] = sorted(d for d in dirs if d != "__pycache__")
+        for n in sorted(names):
+            if n == ".DS_Store" or n.endswith((".pyc", ".plugin")):
+                continue
+            p = os.path.join(root, n)
+            z.write(p, os.path.relpath(p, src))
+PY
 
 # バージョンなしの名前でも出力（常に同じ名前で渡す用途）
 cp "$FILE" "$OUT/$NAME.plugin"

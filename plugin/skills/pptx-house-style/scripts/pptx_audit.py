@@ -55,8 +55,21 @@ def est_height_in(sh, lnpct=1.40, aft_pt=3):
             tot += 6
             continue
         sz = max([r.font.size.pt for r in p.runs if r.font.size] or [10.5])
-        em = sum(1.0 if ord(c) > 0x2000 else 0.55 for c in p.text) * sz
-        tot += max(1, int(em / w) + 1) * sz * lnpct + aft_pt
+        # 級数の違う run が混在する段落（特大の数字＋単位など）は run ごとの幅で数える
+        em = 0.0
+        for r in p.runs:
+            rsz = r.font.size.pt if r.font.size else sz
+            em += sum(1.0 if ord(c) > 0x2000 else 0.55 for c in r.text) * rsz
+        if not p.runs:
+            em = sum(1.0 if ord(c) > 0x2000 else 0.55 for c in p.text) * sz
+        # 段落に行間（spcPct）が明示されていればその値を使う。無ければ lnpct
+        ln = lnpct
+        pPr = p._p.pPr
+        if pPr is not None:
+            for el in pPr.iter():
+                if el.tag.endswith('}spcPct') and el.getparent().tag.endswith('}lnSpc'):
+                    ln = int(el.get('val')) / 100000.0
+        tot += max(1, int(em / w) + 1) * sz * ln + aft_pt
     return tot / 72.0
 
 
