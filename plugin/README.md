@@ -15,7 +15,7 @@
 | `japanese-rewrite` | すでにある下書きを、人が書いたと感じる日本語へ全面的に書き直す |
 | `emphasis-first-drafting` | 書き始める前に「どこに重きを置くか」を確認し、資料の濃淡を設計する |
 | `deck-visual-design` | スライドの見せ方。配色・余白・罫線・文字サイズの段階。参照できる既存ページが無いときの初期値 |
-| `pptx-house-style` | 顧客テンプレートに体裁を合わせる。実測 → 追従 → 機械検証。頻出トラブル6つの回避策 |
+| `pptx-house-style` | 顧客テンプレートに体裁を合わせる。実測 → 追従 → 機械検証。頻出トラブル6つの回避策。テンプレートのない新規デッキは HTML 先行・pptxgenjs 方式（10章） |
 | `requirements-xlsx` | 要件定義Excelの書き方。記入ルールの宣言、採番規約、未決セルとコメント運用 |
 | `deliverable-review-register` | 成果物を議事録と突き合わせ、修正案つきの指摘台帳にまとめる。要件書向けの品質チェックリストつき |
 | `basic-design-review` | 基本設計を要件と双方向で照合し、記述の抜けと未決の確定化を洗い出す |
@@ -32,6 +32,11 @@
 | `pptx-house-style/scripts/fix_fonts.py` | theme / master / layout / slide の全レイヤーでフォントを統一する | 標準ライブラリのみ |
 | `pptx-house-style/scripts/deckkit.py` | 罫線・テキスト枠・セル幅・見出し幅のヘルパ | python-pptx, lxml |
 | `pptx-house-style/scripts/pptx_audit.py` | 文言差分・書式の一様性・フォント混在・はみ出しを検査する | python-pptx |
+| `pptx-house-style/scripts/pptxgenjs/kit.js` | 1920×1080 px 座標の部品（DARK / LIGHT トークン、文字枠の高さ計算、表、リング） | pptxgenjs |
+| `pptx-house-style/scripts/pptxgenjs/build_example.js` | kit.js の最小の使い方（`--light` でライト版） | pptxgenjs |
+| `pptx-house-style/scripts/pptxgenjs/postprocess.py` | pptxgenjs の出力を全レイヤー 1 書体に統一し、typeface と級数を検査する | 標準ライブラリのみ |
+| `pptx-house-style/scripts/pptxgenjs/html_overflow_check.js` | HTML 版の全枚を描画してはみ出しと締めの帯との重なりを出す | playwright |
+| `pptx-house-style/scripts/pptxgenjs/html_to_png.js` | HTML の 1 要素を 2 倍解像度の PNG にする（画像として貼る図だけ） | playwright |
 | `pptx-house-style/scripts/contact_sheet.py` | 全ページを1枚に並べて目視する | Pillow |
 | `requirements-xlsx/scripts/xlsx_open_items.py` | 未決セルとコメントを全件抽出し、コメントの付いていない未決を警告する | 標準ライブラリのみ |
 | `requirements-xlsx/scripts/xlsx_qa.py` | 提出前の Excel を検査する。数式エラー、外部リンク、非表示、名前定義、入力規則、シート間参照、表示形式の揺れ | openpyxl |
