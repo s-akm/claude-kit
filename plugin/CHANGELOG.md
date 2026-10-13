@@ -1,5 +1,18 @@
 # 変更履歴
 
+## 1.6.1 — 2026-10-13
+
+「要る」「要ります」を話し言葉として扱い、「必要」と書くようにした。利用者から、エージェントの返答の「必ず要ります」が
+不自然だと指摘があった。`japanese-business-writing` 自身が、A-1 の言い換え例で「作業が要ります」を勧めていた。
+
+- `japanese-business-writing` — A-1 の言い換え例を「一件ずつ置き換える作業が必要です」に改めた。C-2 の表に
+  「確認が要ります → 確認が必要です」を足し、「要る」「要ります」は「必要」と書くこと、「必ず要ります」のように
+  「必ず」を重ねないことを書いた。本文の「要らない」は「不要」に改めた
+- `japanese-business-writing/references/phrase-table.md` — 1 の例を同じく改め、5 に「確認が要ります／必ず要ります」を足した
+- `japanese-business-writing/scripts/patterns.json` — 「口語の残留」に「要ります」「要りません」「が要る」「は要らない」を足した
+- `japanese-rewrite` — 対外資料の置換表に「要ります／必ず要ります → 必要です」を足した
+- `basic-design-review`・`ai-design-prompt-review`・`deliverable-review-register`・`pptx-house-style` — 本文の「要る」を「必要」に改めた
+
 ## 1.6.0 — 2026-09-26
 
 日本語校正の 2 スキルを、最近のモデル（Claude Fable 5.1 世代）の日本語の癖に合わせて更新。
