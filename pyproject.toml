@@ -13,3 +13,5 @@ dependencies = [
 
 [tool.uv]
 package = false
+# システムの /usr/bin/python3 は Xcode の更新で起動できなくなることがあるため、uv 管理の Python を優先
+python-preference = "managed"

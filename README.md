@@ -44,7 +44,7 @@ macOS ローカルと Claude の組み合わせが前提。Windows と Linux は
 | ツール | バージョン | 用途 | 備考 |
 |---|---|---|---|
 | Node.js | 22 以上 | textlint、markdownlint、just | mise で固定 |
-| Python | 3.10 以上 | チェックスクリプト | uv が用意するため mise の管理は不要 |
+| Python | 3.10 以上 | チェックスクリプト | uv が用意するため mise の管理は不要。uv 管理の Python を優先（`pyproject.toml` の `python-preference`） |
 | uv | 0.12 以上 | Python の依存解決と実行 | — |
 | just | 1.57.0 | チェックコマンドの入口 | npm の `rust-just`。Homebrew は不使用 |
 | poppler | — | PDF のページ画像化とテキスト抽出 | `brew install poppler` |
